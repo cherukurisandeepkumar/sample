@@ -1,0 +1,48 @@
+
+<div class="overlay" *ngIf="overlay"></div>
+<div class="hero-container">
+  <div class="login-body">
+    <div id='loader' *ngIf="loader">
+      <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="margin: auto; background: none; display: block; shape-rendering: auto;" width="200px" height="200px" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid">
+        <circle cx="50" cy="50" r="0" fill="none" stroke="#e90c59" stroke-width="2">
+          <animate attributeName="r" repeatCount="indefinite" dur="1s" values="0;40" keyTimes="0;1" keySplines="0 0.2 0.8 1" calcMode="spline" begin="-0.5s"></animate>
+          <animate attributeName="opacity" repeatCount="indefinite" dur="1s" values="1;0" keyTimes="0;1" keySplines="0.2 0 0.8 1" calcMode="spline" begin="-0.5s"></animate>
+        </circle>
+        <circle cx="50" cy="50" r="0" fill="none" stroke="#46dff0" stroke-width="2">
+          <animate attributeName="r" repeatCount="indefinite" dur="1s" values="0;40" keyTimes="0;1" keySplines="0 0.2 0.8 1" calcMode="spline"></animate>
+          <animate attributeName="opacity" repeatCount="indefinite" dur="1s" values="1;0" keyTimes="0;1" keySplines="0.2 0 0.8 1" calcMode="spline"></animate>
+        </circle>
+      </svg>   
+    </div>
+    <div class="row" style="height:65vh">
+      <div class="col-md-6 first p-0">
+        <h1 class="toptext">CNDN System</h1>
+        <div class="color-overlay"></div>
+      </div>
+      <div class="col-md-6 p-0 second">
+        <div class="global-container">
+          <div class=" login-form">
+            <div class="card-body">
+              <h3 class="card-title login-title">Login</h3>
+              <div class="card-text">  
+                <div class="form-group">
+                  <label for="exampleInputEmail1" id="emaillbl">Login ID/ Email address</label>
+                  <input class="form-control form-control-sm" id="emailid" aria-describedby="emailHelp" name="userName" [(ngModel)]="userName"  [ngStyle]="{'border': userName.length ==0 && loginClicked ? '1px solid red' : '1px solid #CAD5E2' }">
+                  <span class="text-danger error_msg" *ngIf="userName.length ==0 && loginClicked" id="emptyemail">Please enter valid Login ID/ Email address</span>
+                </div>
+                <div class="form-group">
+                  <label for="exampleInputPassword1" id="passwordlbl">Password</label>
+                  <input type="password" class="form-control form-control-sm" id="password" name="password" [(ngModel)]="password" (keyup.enter)='login()'  [ngStyle]="{'border': password.length ==0 && loginClicked ? '1px solid red' : '1px solid #CAD5E2' }">
+                  <span class="text-danger error_msg" *ngIf="password.length ==0 && loginClicked" id="emptypassword">Please enter your password</span>
+                </div>
+                <button type="submit" class="btn btn-success btn-block" id="fsubmit" (click)="login()" >Login</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p-growl [(value)]="Messages" life="10000" ></p-growl>

@@ -1,0 +1,777 @@
+<!-- Header -->
+<app-header></app-header>
+<!-- End Header -->
+
+<!-- Page Content -->
+<div class="overlay d-none"></div>
+<div class="page">
+    <div class="page-container">
+        <div class="container-fluid container-wrapper">
+            <div class="overlay" *ngIf="overlay"></div>
+          
+            <div class="row">
+                <div class="col-sm d-flex justify-content-between">
+                    <h4 class="page-title ">Upload CNDN</h4>
+                    <!-- <button *ngIf="AccordiansSubmit.length != 0" class="btn btn-sm btn-danger c-btn" (click)="_doGoBack()" >Back</button> -->
+
+                </div>
+                
+            </div>
+
+          
+            <div class="row mb-2" *ngIf='AccordiansSubmit.length == 0'>
+                <div class="col-12">
+                  <div class="m-panel__body">
+                  
+                    <div class="" *ngIf="loader" id='loader'>
+                      <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="margin: auto; background: none; display: block; shape-rendering: auto;" width="200px" height="200px" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid">
+                        <circle cx="50" cy="50" r="0" fill="none" stroke="#e90c59" stroke-width="2">
+                          <animate attributeName="r" repeatCount="indefinite" dur="1s" values="0;40" keyTimes="0;1" keySplines="0 0.2 0.8 1" calcMode="spline" begin="-0.5s"></animate>
+                          <animate attributeName="opacity" repeatCount="indefinite" dur="1s" values="1;0" keyTimes="0;1" keySplines="0.2 0 0.8 1" calcMode="spline" begin="-0.5s"></animate>
+                        </circle>
+                        <circle cx="50" cy="50" r="0" fill="none" stroke="#46dff0" stroke-width="2">
+                          <animate attributeName="r" repeatCount="indefinite" dur="1s" values="0;40" keyTimes="0;1" keySplines="0 0.2 0.8 1" calcMode="spline"></animate>
+                          <animate attributeName="opacity" repeatCount="indefinite" dur="1s" values="1;0" keyTimes="0;1" keySplines="0.2 0 0.8 1" calcMode="spline"></animate>
+                        </circle>
+                      </svg>
+                    </div>
+                    <div class="m-upload__cndn row" >
+                        <!-- <div class="col-md-5 d-flex"> -->
+                            <div class="col-md- p-1 text-right">
+                                <div class="form-group mb-0">
+                                    <div>
+                                        <a href="javascript:void(0);" class="btn btn-xs btn-success ml-4 c-btn -filter-btn-top -excel" 
+                                        (click)="downloadFile()">
+                                            <i class="fas fa-download pr-1"></i>Download Template</a>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md- p-1">
+                                <div class="form-group mb-0">
+                                    <input class="form-control h-auto -filter-control-top" type="file" 
+                                    [(ngModel)]="fileSelected" (change)="_uploadFile($event)" />
+                                </div>
+
+                                <!-- <div class="col-md-12 text-center">
+                                    <div class="fileSelected-container">
+                                     <input type="file" class="fileSelected" [(ngModel)]="fileSelected" (change)="_uploadFile($event)" />
+                                     Choose File
+                                    </div>
+                                   </div> -->
+
+                            </div>
+                            <div class="col-md- p-1">
+                                <div class="form-group mb-0">
+                                    <div>
+                                        <button type="submit" (click)='UploadFile()' class="btn btn-xs btn-warning c-btn -filter-btn-top">Upload</button>
+                                    </div>
+                                </div>
+                            </div>
+                        <!-- </div> -->
+                    </div>
+
+                </div>
+            </div>
+          </div>
+
+          <div class="row" *ngIf="AccordiansSubmit.length != 0">
+            <div class="col-12">
+                <div class="">
+                    <div class="m-panel__body">
+                      <div class="" *ngIf="loader" id='loader'>
+                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="margin: auto; background: none; display: block; shape-rendering: auto;" width="200px" height="200px" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid">
+                          <circle cx="50" cy="50" r="0" fill="none" stroke="#e90c59" stroke-width="2">
+                            <animate attributeName="r" repeatCount="indefinite" dur="1s" values="0;40" keyTimes="0;1" keySplines="0 0.2 0.8 1" calcMode="spline" begin="-0.5s"></animate>
+                            <animate attributeName="opacity" repeatCount="indefinite" dur="1s" values="1;0" keyTimes="0;1" keySplines="0.2 0 0.8 1" calcMode="spline" begin="-0.5s"></animate>
+                          </circle>
+                          <circle cx="50" cy="50" r="0" fill="none" stroke="#46dff0" stroke-width="2">
+                            <animate attributeName="r" repeatCount="indefinite" dur="1s" values="0;40" keyTimes="0;1" keySplines="0 0.2 0.8 1" calcMode="spline"></animate>
+                            <animate attributeName="opacity" repeatCount="indefinite" dur="1s" values="1;0" keyTimes="0;1" keySplines="0.2 0 0.8 1" calcMode="spline"></animate>
+                          </circle>
+                        </svg>
+                      </div>
+                      <div class="d-flex justify-content-between align-items-center">
+                        <div class="col-md-4 p-0">
+                          <div class="d-flex align-items-center">
+                             <input type="checkbox" (click)="_bulkSelect()" [(ngModel)]="isSelectAll">
+                             <button class="control-label ml-2 btn btn-sm btn-success c-btn" *ngIf="!isSelectAll" (click)="_bulkSelect()">Select All</button>
+
+                             <button class="control-label ml-2 btn btn-sm btn-success c-btn" *ngIf="isSelectAll" (click)="_bulkSelect()">Deselect All</button>
+                          </div>
+                        </div>
+                        <div class="col-md-4 p-0 pb-2 d-flex justify-content-end">
+                          <button  class="btn btn-sm btn-success c-btn" (click)="_doBulkUpload()" >Bulk Update</button>
+                          <button  class="btn btn-sm btn-danger c-btn ml-2" (click)="_doBulkDelete()" >Bulk Cancel</button>
+                           
+                         </div>
+                         
+                      </div>
+                      <!-- <div class="col-md-12 p-0 pb-2 d-flex justify-content-end">
+                         <button  class="btn btn-sm btn-success c-btn" (click)="_doBulkUpload()" >Bulk Update</button>
+                         <button  class="btn btn-sm btn-success c-btn ml-2" (click)="_doBulkDelete()" >Bulk Delete</button>
+                          
+                        </div> -->
+
+                        <div class="m-accordians">
+                            <div class="m-accordians__container">
+                                <p-accordion>
+                                  <div class="d-flex" *ngFor="let item of AccordiansSubmit; let i=index">
+                                   <div class="mt-2 mr-2">
+                                 <input type="checkbox"  [(ngModel)]="item.isChecked" (click)="_isSelectUnSelectAll(item)"/>
+                                </div>  
+                                 <p-accordionTab header="{{item.purpose}} (CNDN ID: {{item.dncnId}})"
+                                    [ngClass]='item.errorFlag == 0 ? "success" : "fail"'
+                                     (click)="toggle(i, item)" 
+                                     (onOpen)="onTabOpen($event)"
+                                     (onClose)="onTabClose(i)"
+                                     [selected]="item.closeAccordian"
+                                     [disabled]="item.disabledAfterSubmit"
+                                     class="submitted-accordian {{item.disabledAfterSubmit}}"
+                                       >
+                                        <!-- <p>{{i}}</p> -->
+                                         <!-- Multiple inovices Div-->
+      <div class="multipleDiv" *ngIf="item.closeAccordian == false">
+        <div class="row">
+          <div class="col-12">
+            <div class="m-panel__body">
+              <div class="m-form -search">
+                <div class="m-form__container">
+                  <div class="m-form__form">
+                    <div class="row justify-content-between">
+                        <div class="col-md-3">
+                          <div class="form-group">
+                            <label class="control-label ">Purpose</label>
+                            <!-- <select class="form-control" [value]='item.purpose'
+                             (change)="changePurpose($event)"
+                             [(ngModel)]="item.purpose">
+                             <option value="0">--Select--</option>
+                             <option *ngFor="let item of purposeList; let i" value="{{ item.purPoseMasterId }}" >{{ item.purpose }}</option>
+                            </select> -->
+                          <input type="text" [disabled]="true"  class="form-control" [(ngModel)]="item.purpose" />
+                            </div>
+                        </div>
+                        <div class="col-md-5 d-flex justify-content-end">
+                        <a href="javascript:void(0)" *ngIf="item.errorFlag == 1" class="text-danger" (click)="_doShowErrors(i, item)" >Click here to view errors</a>
+
+
+                        </div>
+                      </div>
+                    <div class="row">
+                      <div class="col-md-3" *ngIf="item.purInvType != 'withoutinv'">
+                        <div class="form-group">
+                          <label class="col-form-label">Invoice</label>
+                          <input type="text" class="form-control form-control-sm"
+                           [(ngModel)]="item.invoiceNumber" 
+                          (keyup)="insertMultipleInvoice()" 
+                          (keyup.enter) = 'multipleInvoiceSearch(i, item)' 
+                          [ngStyle]="{'border':  ((item.invoiceNumber == '' && item.invoiceSerarchClicked) || invalidMultipleIncoice )  ? '1px solid red' : '1px solid #758283' }" />
+                          <span class="text-sm text-danger" *ngIf='item.invoiceSerarchClicked && item.invoiceNumber == "" '>Enter Invoice</span>
+                          <span class="text-sm text-danger" *ngIf='item.invoiceSerarchClicked && invalidMultipleIncoice'>Enter a valid invoice</span>
+                        </div>
+                      </div>
+                      <div class="col-md-1"  *ngIf="item.purInvType != 'withoutinv'">
+                        <button
+                          class="btn btn-sm btn-primary c-btn -search -top" (click)="multipleInvoiceSearch(i, item)" > Search </button>
+                      </div>
+                      
+                      <div class="col-md-4" *ngIf="item.purInvType != 'withoutinv'">
+                        <div class="form-group">
+                          <label class="control-label">Customer</label>
+                          <h6 > {{ item.customer }} </h6>
+                        </div>
+                      </div>
+                      <div class="col-md-3" *ngIf="item.purInvType == 'withoutinv'">
+                        <div class="form-group">
+                          <label class="col-form-label ">Company</label>
+                          <p-dropdown #dropdown [options]="companyList" 
+                          [(ngModel)]="item.company"
+                          optionLabel="customer" optionValue="customerCode" 
+                          placeholder="--Select--" [autoDisplayFirst]="true" 
+                          [virtualScroll]="true" [itemSize]="10" [filter]="true"
+                           (onChange)="changeCompany($event, item, i)" ></p-dropdown>
+                          <!-- <span class="text-danger text-sm" *ngIf='withoutsubmitClicked && !changedCompany'>Kindly select one comapny</span> -->
+                        </div>
+                      </div>
+                      <div class="col-md-2" *ngIf="item.programIdMandatory == true">
+                        <div class="form-group">
+                          <label class="control-label">ProgramId Mandatory<span class="text-danger" >*</span ></label >
+                          <input type="text" class="form-control form-control-sm" 
+                          [(ngModel)]="item.programId" 
+                          [ngStyle]="{'border':  ( item.programId.trim() == '' && item.submitclicked)  ? '1px solid red' : '1px solid #758283' }" />
+                          <span class="text-sm text-danger" *ngIf='item.submitclicked && item.programId.trim() == "" '>Kindly insert Program ID</span>
+                        </div>
+                      </div>
+                      <div class="col-md-2">
+                        <div class="form-group">
+                          <label class="control-label">Vendor Cn<span class="text-danger" ></span ></label >
+                          <input type="text" class="form-control form-control-sm" 
+                          [(ngModel)]="item.vendorCn" 
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-3" *ngIf="item.purInvType != 'withoutinv'">
+                        <div class="form-group">
+                          <label class="col-form-label ">SO#</label>
+                          <h6 > {{ item.soNumber }} </h6>
+                        </div>
+                      </div>
+                      <div class="col-md-3">
+                        <div class="form-group">
+                          <label class="col-form-label " >Site</label >
+                          <h6  *ngIf="item.purInvType != 'withoutinv'"> {{ item.site }} </h6>
+                            <div class="" *ngIf="item.purInvType == 'withoutinv'">
+                                <input type="text" class="form-control" [(ngModel)]="item.site">
+                            </div>
+                        </div>
+                      </div>
+                      <div class="col-md-3">
+                        <div class="form-group">
+                          <label class="col-form-label " >Location</label >
+                          <h6  *ngIf="item.purInvType != 'withoutinv'"> {{ item.location }} </h6>
+                          <div class="" *ngIf="item.purInvType == 'withoutinv'">
+                            <input type="text" class="form-control" [(ngModel)]="item.location">
+                        </div>
+                        </div>
+                      </div>
+                      <div class="col-md-3">
+                        <div class="form-group">
+                          <label class="col-form-label ">FOB</label>
+                          <h6  *ngIf="item.purInvType != 'withoutinv'">{{ item.fob }}</h6>
+                          <div class="" *ngIf="item.purInvType == 'withoutinv'">
+                            <input type="text" class="form-control" [(ngModel)]="item.fob">
+                        </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row" *ngIf="item.purInvType == 'multiple'">
+                      <div class="col-md-3">
+                        <table class="table table-bordered table-sm" >
+                          <thead>
+                            <tr class="thead-dark">
+                              <th class="text-center ">Invoice</th>
+                              <th class="text-center ">Action</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr *ngFor="let invoice of item.invoiceList">
+                              <td class="text-center">{{ invoice.invoiceNumber }}</td>
+                              <td class="text-center _pointer">
+                                <i class="fas fa-trash-alt text-danger text-center" (click)="removeInvoice(invoice, i, item)"></i>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                    <div class="row" *ngIf="item.purInvType != 'withoutinv'">
+                      <div class="col-md-12 mt-4">
+                        <div class="table-responsive p-table cndn-table">
+                          <p-table #dt [columns]="cols" [value]="item.dnCnProductsADataList" [paginator]="true" [rows]="11" >
+                            <ng-template pTemplate="header" let-columns>
+                              <tr>
+                                <th *ngFor="let col of columns">
+                                  {{ col.header }}
+                                </th>
+                              </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-rowData let-columns="cols" let-r="rowIndex" >
+                              <tr [pSelectableRow]="rowData">
+                                <td *ngFor="let col of cols; let i = index">
+                                  <div *ngIf="col.field === 'serialNo'">
+                                    <span *ngIf="r < item.DnCnProductsADataList?.length - 3">{{  r + 1 }}</span>
+                                  </div>
+                                  <input class="form-control" type="text" 
+                                   *ngIf="i == 8"
+                                   [(ngModel)]="rowData[col.field]"
+                                    (blur)="changeMultipleQty(rowData, $event)"
+                                    (keyup)="validateNumber($event, rowData[col.field])" />
+                                  <input class="form-control" type="text"  
+                                  *ngIf="i == 9"
+                                  [(ngModel)]="rowData[col.field]"
+                                  (keyup)="validateNumber($event, rowData[col.field])" 
+                                   (blur)="changeMultiplePerUnit(rowData, $event)" />
+                                  <!-- <input type="text" placeholder="{{rowData[col.field]}}" *ngIf="i == 10 " [(ngModel)]="userData3.total"> -->
+                                  <span *ngIf="i == 10" >{{ rowData.cN_DN_Total }}</span >
+                                  <!-- <span *ngIf="rowData.cndnTotal == 'g' && i == 10" >{{ totall }}</span > -->
+                                  <span *ngIf="i != 8 && i != 9 && i != 10"> {{ rowData[col.field] }}</span >
+                                </td>
+                              </tr>
+                            </ng-template>
+                            <ng-template pTemplate="footer">
+                              <tr>
+                                  <td *ngFor="let i of [0,1,2,3]"></td>
+                                  <td>Total Debit/Credit Amt (w/o gst):</td>
+                                  <td>{{item.price}}</td>
+                                  <td *ngFor="let i of [0,1,2,3]"></td>
+                                  <td>{{item.DnCnAMount}}</td>
+                              </tr>
+                              <tr>
+                                <td *ngFor="let i of [0,1,2,3]"></td>
+                                  <td>GST @ 0%:</td>
+                                  <td></td>
+                                  <td *ngFor="let i of [0,1,2,3]"></td>
+                                  <td>0</td>
+                            </tr>
+                            <tr>
+                              <td *ngFor="let i of [0,1,2,3]"></td>
+                                  <td>Debit/Credit Amt (w gst):</td>
+                                  <td></td>
+                                  <td *ngFor="let i of [0,1,2,3]"></td>
+                                  <td>{{item.DnCnAMount}}</td>
+                          </tr>
+                          </ng-template>
+                          </p-table>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row mt-4">
+                      <div class="col-md-3">
+                        <div class="form-group">
+                          <label class="col-form-label ">Finance Acount</label >
+                          <h6>{{ item.financeAccountCode }}</h6>
+                       
+                        </div>
+                      </div>
+                      <div class="col-md-3">
+                        <div class="form-group">
+                          <label class="col-form-label " >Template</label >
+                          <h6>{{ item.template }}</h6>
+                        </div>
+                      </div>
+                      <div class="col-md-6 d-flex" *ngIf="item.purInvType == 'withoutinv'">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                              <label class="col-form-label ">Qty<span class="text-danger">*</span></label>
+                              <input type="text" class="form-control form-control-sm" 
+                              (blur)="changeQty(item.dnCnProductsADataList[0], $event, i)"
+                              (keyup)="validateNumber($event, item.dnCnProductsADataList[0].quantity)"
+                              [(ngModel)]="item.dnCnProductsADataList[0].quantity"
+                               [ngStyle]="{'border':  ( (item.dnCnProductsADataList[0].quantity == null || item.dnCnProductsADataList[0].quantity == '')  && item.submitclicked)  ? '1px solid red' : '1px solid #758283' }" />
+                              <span class="text-sm text-danger" *ngIf='item.submitclicked && (item.dnCnProductsADataList[0].quantity == null || item.dnCnProductsADataList[0].quantity == "")  '>Kindly insert Qty</span>
+                            </div>
+                          </div>
+                          <div class="col-md-4">
+                            <div class="form-group">
+                              <label class="col-form-label " >Per Unit<span class="text-danger">*</span></label >
+                              <input type="text" class="form-control form-control-sm" (blur)="changePerUnit(item.dnCnProductsADataList[0],$event, i)"
+                               [(ngModel)]="item.dnCnProductsADataList[0].cN_Dn_PricePerUnit" 
+                               [ngStyle]="{'border':  ( (item.dnCnProductsADataList[0].cN_Dn_PricePerUnit == null || item.dnCnProductsADataList[0].cN_Dn_PricePerUnit == '')  && item.submitclicked)  ? '1px solid red' : '1px solid #758283' }" />
+                              <span class="text-sm text-danger" *ngIf='item.submitclicked && (item.dnCnProductsADataList[0].cN_Dn_PricePerUnit == null || item.dnCnProductsADataList[0].cN_Dn_PricePerUnit == "")  '>Kindly insert Per Unit</span>
+                            </div>
+                          </div>
+                          <div class="col-md-4">
+                            <div class="form-group">
+                              <label class="col-form-label " >Total</label >
+                              <h6>{{item.dnCnProductsADataList[0].cN_DN_Total  | number:'0.2-2'}}</h6>
+                              <span class="text-sm text-danger" *ngIf='item.submitclicked && item.DnCnAMount  == 0  '>Total can not be 0</span>
+                            </div>
+                          </div>
+                      </div>
+                     
+                      <div class="col-md-2">
+                        <div class="form-group">
+                          <label class="col-form-label " >Type<span class="text-danger">*</span></label >
+                          <div class="m-form__radio-group">
+                            <div class="custom-control custom-radio">
+                              <input type="radio" value="credit" [id]="'a'+i" [name]="i"
+                               class="custom-control-input" [(ngModel)]="item.type"  />
+                              <label class="custom-control-label" [for]="'a'+i" >Credit</label >
+                            </div>
+                            <div class="custom-control custom-radio">
+                              <input type="radio" value="debit" [id]="'b'+i+1" [name]="i" 
+                              class="custom-control-input" [(ngModel)]="item.type"  />
+                              <label class="custom-control-label" [for]="'b'+i+1" >Debit</label >
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-2">
+                        <div class="form-group">
+                          <label class="col-form-label " >Incentive<span class="text-danger">*</span></label >
+                          <div class="m-form__radio-group">
+                            <div class="custom-control custom-radio">
+                              <input type="radio" [value]=true [id]="'c'+i" [name]="'aa'+i"
+                              class="custom-control-input" [(ngModel)]="item.incentive"
+                              />
+                              <label class="custom-control-label" [for]="'c'+i" >Yes</label >
+                            </div>
+                            <div class="custom-control custom-radio">
+                              <input type="radio" [value]=false [id]="'d'+i+1" [name]="'aa'+i"
+                               class="custom-control-input" [(ngModel)]="item.incentive"
+                                />
+                              <label class="custom-control-label" [for]="'d'+i+1" >No</label >
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-2">
+                        <div class="form-group d-flex flex-column">
+                          <label class="col-form-label text-left " >GST Applied?</label >
+                          <p-inputSwitch [(ngModel)]="item.gstApplied" class="ml-2"></p-inputSwitch>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-4">
+                        <div class="form-group">
+                          <label class="col-form-label " >Remarks</label >
+                          <textarea class="form-control" rows="3" cols="50" [(ngModel)]="item.remarks" ></textarea>
+                        </div>
+                      </div>
+                      <div class="col-md-4">
+                        <div class="form-group">
+                          <label class="col-form-label " >Details</label >
+                          <textarea class="form-control" rows="3" cols="50" [(ngModel)]="item.detail" ></textarea>
+                        </div>
+                      </div>
+                      <div class="col-md-4">
+                        <div class="form-group">
+                          <label class="control-label " >Approve By <span class="text-danger">*</span> </label>
+                          <select class="form-control" [(ngModel)]="item.approvedBy" [ngStyle]="{'border':  item.approvedBy == 0 && item.submitclicked  ? '1px solid red' : '1px solid #758283' }">
+                            <option value="0">--Select--</option>
+                            <option *ngFor="let item of userList; let i" value="{{ item.id }}" > {{ item.name }} </option>
+                          </select>
+                          <span class="text-danger text-sm errorText" *ngIf='item.submitclicked && item.approvedBy == 0'>Kindly select Approved By</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-12 form-group">
+                        <!-- <input type="file" class="fileSelected2 form-control-file" (change)="_multiUploadFile($event)" multiple />
+                        <button class="fileSleect btn btn-primary btn-sm" (click)="triggerInput2()" > Choose File </button> -->
+                        <div class="fileSelected-container">
+                            <input type="file" class="fileSelected" [(ngModel)]="fileSelected" multiple (change)="_uploadmultipleFile($event, i, item)" />
+                            Choose File
+                           </div>
+                        <button class="btn btn-danger btn-sm ml-3" (click)="multiClearAllFile()" *ngIf="item.filesList?.length > 0" >Clear All </button>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-12">
+                        <ng-template [ngIf]="item.fileList?.length > 0" >
+                          <ul class="list-group">
+                            <li class="list-group-item bg_success text-white">  File: </li>
+                            <li class="list-group-item" *ngFor=" let file of item.fileList; let ind = index "> {{ file.FileName }} 
+                              <span class="text-danger _pointer" 
+                              (click)="multiRemoveFile(i, item)"><i class="fas fa-trash-alt"></i ></span></li>
+                          </ul>
+                        </ng-template>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div  class="col-md-3 ml-auto d-flex justify-content-end pb-1 mt-2" >
+                        <div class="col-md-3 ml-auto d-flex justify-content-end pb-1 mt-2" >
+                          <button  type="button" class="btn btn-sm c-btn btn-primary" id="submit" (click)="multisubmitData(i, item)" > Update </button>
+                          <!-- <button class="btn btn-danger btn-sm ml-2" id="cancelBtn" (click)="multipleDivCancel(i, item)" > Cancel </button> -->
+                          <button  class="btn btn-sm btn-danger c-btn ml-2" (click)="_doDelete(item)">Cancel</button>
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+                                    </p-accordionTab>
+                                    </div>
+
+                                </p-accordion>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12 p-0 pt-2 d-flex justify-content-end">
+                          <button  class="btn btn-sm btn-success c-btn" (click)="_doBulkUpload()" >Bulk Update</button>
+                          <button  class="btn btn-sm btn-danger c-btn ml-2" (click)="_doBulkDelete()" >Bulk Cancel</button>
+                          
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+    </div>
+</div>
+<!-- End Page Content -->
+
+<!-- Footer -->
+<app-footer></app-footer>
+<!-- End Footer -->
+
+<p-dialog [(visible)]="errorModel_New" [modal]="true" [style]="{'width':'500px'}" [showHeader]="false" [draggable]="false" [closeOnEscape]="true" [dismissableMask]="false" [responsive]="true">
+    <div class="p-dialog__content">
+      <div class="p-dialog__header " *ngIf='successorerror == "Success"'>
+        <h5 class="modal-title">{{successorerror}}</h5>
+      </div>
+      <div class="p-dialog__header -delete" *ngIf='successorerror == "Error"'>
+        <h5 class="modal-title">{{successorerror}}</h5>
+      </div>
+      <div class="p-dialog__body">
+        <div class="row">
+          <div class="col-md-12">
+            <h5 *ngIf="!message.includes('<br>')" class="p-dialog__confirm--lbl -delete" 
+            >{{message}}
+        </h5>
+        <h5 *ngIf="message.includes('<br>')" class="p-dialog__confirm--lbl -delete" 
+        [innerHtml]="message"
+        >
+    </h5>
+                     <!-- <h5 class="p-dialog__confirm--lbl -delete" *ngIf='additionalStandardCost == ""'>Please enter standard cost !!!</h5> -->
+          </div>
+        </div>
+      </div>
+    </div>
+    <p-footer>
+      <div class="p-dialog__footer">
+        <hr>
+        <button class="btn btn-sm btn-primary c-btn" (click)="closeErrorModalNew()" >OK</button>
+      </div>
+    </p-footer>
+  </p-dialog>
+
+  <p-dialog [(visible)]="errorModel_New1" [modal]="true" [style]="{'width':'500px'}" [showHeader]="false" [draggable]="false" [closeOnEscape]="true" [dismissableMask]="false" [responsive]="true">
+    <div class="p-dialog__content">
+    
+      <div class="p-dialog__header " *ngIf='successorerror == "Success"'>
+        <h5 class="modal-title">{{successorerror}}</h5>
+      </div>
+      <div class="p-dialog__header -delete" *ngIf='successorerror == "Error"'>
+        <h5 class="modal-title">{{successorerror}}</h5>
+      </div>
+      <div class="p-dialog__body">
+        <div class="row">
+          <div class="col-md-12">
+            <h5  class="p-dialog__confirm--lbl -delete" 
+            >{{message}}
+      
+    </h5>
+                     <!-- <h5 class="p-dialog__confirm--lbl -delete" *ngIf='additionalStandardCost == ""'>Please enter standard cost !!!</h5> -->
+          </div>
+        </div>
+      </div>
+    </div>
+    <p-footer>
+      <div class="p-dialog__footer">
+        <hr>
+        <button class="btn btn-sm btn-primary c-btn" (click)="closeErrorModalNew1()" >OK</button>
+      </div>
+    </p-footer>
+  </p-dialog>
+
+  <p-dialog [(visible)]="fileselectError" [modal]="true" [style]="{'width':'500px'}" [showHeader]="false" [draggable]="false" [closeOnEscape]="true" [dismissableMask]="false" [responsive]="true">
+    <div class="p-dialog__content">
+     
+      <div class="p-dialog__header -delete" >
+        <h5 class="modal-title">Error</h5>
+      </div>
+      <div class="p-dialog__body">
+        <div class="row">
+          <div class="col-md-12">
+            <h5  class="p-dialog__confirm--lbl -delete" 
+            >{{message}}
+        </h5>
+       
+   
+                     <!-- <h5 class="p-dialog__confirm--lbl -delete" *ngIf='additionalStandardCost == ""'>Please enter standard cost !!!</h5> -->
+          </div>
+        </div>
+      </div>
+    </div>
+    <p-footer>
+      <div class="p-dialog__footer">
+        <hr>
+        <button class="btn btn-sm btn-primary c-btn" (click)="closefileErrorModalNew()" >OK</button>
+      </div>
+    </p-footer>
+  </p-dialog>
+
+  <p-dialog [(visible)]="showErrors" [modal]="true" [style]="{'width':'500px'}" [showHeader]="false" [draggable]="false" [closeOnEscape]="true" [dismissableMask]="false" [responsive]="true">
+    <div class="p-dialog__content">
+     
+      <div class="p-dialog__header -delete" >
+        <h5 class="modal-title">Error</h5>
+      </div>
+      <div class="p-dialog__body">
+        <div class="row">
+          <div class="col-md-12">
+            <ul class="d-flex flex-column">
+              <li  class="p-dialog__confirm--lbl text-left -delete" *ngFor="let error of errorMessages"
+              >{{error.status}}
+            </li>
+            </ul>
+            
+       
+   
+                     <!-- <h5 class="p-dialog__confirm--lbl -delete" *ngIf='additionalStandardCost == ""'>Please enter standard cost !!!</h5> -->
+          </div>
+        </div>
+      </div>
+    </div>
+    <p-footer>
+      <div class="p-dialog__footer">
+        <hr>
+        <button class="btn btn-sm btn-primary c-btn" (click)="closeStatusErrorModalNew()" >OK</button>
+      </div>
+    </p-footer>
+  </p-dialog>
+
+<p-dialog [(visible)]="multipleDetailsDialog" [modal]="true" [style]="{ width: '990px' }" [showHeader]="false" [draggable]="false" [closeOnEscape]="true" [dismissableMask]="true" [responsive]="true" >
+    <div class="p-dialog__content">
+      <div class="p-dialog__header">
+        <h5 class="modal-title">Multiple Invoice Details</h5>
+      </div>
+      <div class="p-dialog__body">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="form-group">
+              <label class="col-form-label ">Customer:</label>
+              <h6>{{ multipleModalData.customer }}</h6>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-3">
+            <div class="form-group">
+              <label class="col-form-label ">SO#:</label>
+              <h6>{{ multipleModalData.soNumber }}</h6>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="form-group">
+              <label class="col-form-label ">Site:</label>
+              <h6>{{ multipleModalData.site }}</h6>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="form-group">
+              <label class="col-form-label ">Location:</label>
+              <h6>{{ multipleModalData.location }}</h6>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="form-group">
+              <label class="col-form-label ">FOB:</label>
+              <h6>{{ multipleModalData.fob }}</h6>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12 mt-4">
+            <div class="table-responsive p-table cndn-table">
+              <p-table #dt [columns]="cols2" [value]="multipleModalData.productsList" [paginator]="true" [rows]="11" >
+                <ng-template pTemplate="header" let-columns>
+                  <tr>
+                    <th *ngFor="let col of columns">{{ col.header }}</th>
+                  </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-rowData let-columns="cols2" let-r="rowIndex" >
+                  <tr [pSelectableRow]="rowData">
+                    <td *ngFor="let col of cols2; let i = index">
+                      <div *ngIf="col.field === 'serialNo'">
+                        <span *ngIf="r < multipleModalData.productsList?.length - 3">{{ r + 1 }}</span>
+                      </div>
+                      <span> {{ rowData[col.field] }}</span>
+                    </td>
+                  </tr>
+                </ng-template>
+              </p-table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p-footer>
+      <div class="p-dialog__footer">
+        <button  type="button" class="btn btn-sm btn-primary" (click)="closeMultiInvoiceModal()" > Add </button>
+        <button type="button" class="btn btn-sm btn-danger" (click)="cancelMultiInvoiceModal()" > Cancel</button>
+      </div>
+    </p-footer>
+  </p-dialog>
+
+  <p-confirmDialog class="-top100" [style]="{width: '50vw'}" [baseZIndex]="10000"></p-confirmDialog>
+
+
+  
+<p-dialog [(visible)]="showDeleteDialog" [modal]="true" [style]="{'width':'500px'}" [showHeader]="false"
+[draggable]="false" [closeOnEscape]="true" [dismissableMask]="true" [responsive]="true">
+<div class="p-dialog__content">
+    <div class="p-dialog__header -delete">
+        <h5 class="modal-title">Cancel </h5>
+    </div>
+    <div class="p-dialog__body">
+        <div class="row">
+            <div class="col-md-12">
+                <h5 class="p-dialog__confirm--lbl -delete">
+                  Are you sure want to Cancel this CNDN'S?
+                </h5>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 ">
+                <div class="form-group">
+                    <label  class="col-form-label">Remarks</label>
+                    <div class="form-group">
+                        <textarea class="form-control" rows="2" cols="64" [(ngModel)]="remarks" ></textarea>   
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<p-footer>
+    <div class="p-dialog__footer">
+        <hr>
+        <button class="btn btn-sm btn-warning c-btn -delete" (click)="cancelCn()">
+            Yes
+        </button>
+        <button class="btn btn-sm btn-warning c-btn -cancel" (click)="cancelModal()">
+            No
+        </button>
+    </div>
+</p-footer>
+</p-dialog>
+
+  
+<p-dialog [(visible)]="showSingleDeleteDialog" [modal]="true" [style]="{'width':'500px'}" [showHeader]="false"
+[draggable]="false" [closeOnEscape]="true" [dismissableMask]="true" [responsive]="true">
+<div class="p-dialog__content">
+    <div class="p-dialog__header -delete">
+        <h5 class="modal-title">Cancel </h5>
+    </div>
+    <div class="p-dialog__body">
+        <div class="row">
+            <div class="col-md-12">
+                <h5 class="p-dialog__confirm--lbl -delete">
+                  Are you sure want to Cancel this CNDN?
+                </h5>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 ">
+                <div class="form-group">
+                    <label  class="col-form-label">Remarks</label>
+                    <div class="form-group">
+                        <textarea class="form-control" rows="2" cols="64" [(ngModel)]="remarks" ></textarea>   
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<p-footer>
+    <div class="p-dialog__footer">
+        <hr>
+        <button class="btn btn-sm btn-warning c-btn -delete" (click)="cancelSingleCn()">
+            Yes
+        </button>
+        <button class="btn btn-sm btn-warning c-btn -cancel" (click)="cancelSingleModal()">
+            No
+        </button>
+    </div>
+</p-footer>
+</p-dialog>

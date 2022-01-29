@@ -1,0 +1,342 @@
+<!-- Header -->
+<app-header></app-header>
+<!-- End Header -->
+
+<div class="page">
+  <div class="page-container">
+    <div class="container-fluid container-wrapper">
+      <div class="overlay" *ngIf="overlay"></div>
+      <div class="row">
+        <div class="col-sm">
+          <h4 class="page-title ">Search CNDN</h4>
+        </div>
+      </div>
+      <div class="row mb-2">
+        <div class="col-12">
+          <div class="m-panel__body">
+            <div class="" *ngIf="loader" id='loader'>
+              <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="margin: auto; background: none; display: block; shape-rendering: auto;" width="200px" height="200px" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid">
+                <circle cx="50" cy="50" r="0" fill="none" stroke="#e90c59" stroke-width="2">
+                  <animate attributeName="r" repeatCount="indefinite" dur="1s" values="0;40" keyTimes="0;1" keySplines="0 0.2 0.8 1" calcMode="spline" begin="-0.5s"></animate>
+                  <animate attributeName="opacity" repeatCount="indefinite" dur="1s" values="1;0" keyTimes="0;1" keySplines="0.2 0 0.8 1" calcMode="spline" begin="-0.5s"></animate>
+                </circle>
+                <circle cx="50" cy="50" r="0" fill="none" stroke="#46dff0" stroke-width="2">
+                  <animate attributeName="r" repeatCount="indefinite" dur="1s" values="0;40" keyTimes="0;1" keySplines="0 0.2 0.8 1" calcMode="spline"></animate>
+                  <animate attributeName="opacity" repeatCount="indefinite" dur="1s" values="1;0" keyTimes="0;1" keySplines="0.2 0 0.8 1" calcMode="spline"></animate>
+                </circle>
+              </svg>
+            </div>
+            <div class="m-form -search">
+              <div class="m-form__container">
+                <div class="m-form__form">
+                  <div class="row">
+                    <div class="col-md-3">
+                      <div class="form-group">
+                        <label class="control-label ">customer</label>
+                        <p-dropdown #dropdown [options]="customerList" optionLabel="customer" optionValue="customerCode"  placeholder="--Select--" [virtualScroll]="true" [itemSize]="10" [filter]="true" (onChange)="changeCompany($event)"></p-dropdown>
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <div class="form-group">
+                        <label class="control-label ">Purpose</label>
+                        <select class="form-control" (change)="changePurpose(purpose)" [(ngModel)]="purpose">
+                          <option value=0>-- Select --</option>
+                          <option  *ngFor="let item of purposeList; let i" value="{{ item.purPoseMasterId }}">{{ item.purpose }}</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <div class="form-group">
+                        <label class="control-label ">Date Applied</label>
+                        <div>
+                          <p-calendar  [(ngModel)]="appliedDate" (onSelect)="changeDate($event)" dateFormat="dd/mm/yy" [readonlyInput]="true"></p-calendar>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <div class="form-group">
+                        <label class="control-label ">Applied By</label>
+                        <select class="form-control" [(ngModel)]="appliedBy" (change)="changeAppliedBy(appliedBy)">
+                          <option value=0>-- Select --</option>
+                          <option *ngFor="let item of appliedList; let i" value="{{ item.id }}">{{ item.name }}</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-3">
+                      <div class="form-group">
+                        <label class="control-label ">Approved By</label>
+                        <select class="form-control" [(ngModel)]="approvedBy" (change)="changeApprovedBy(approvedBy)">
+                          <option value=0>-- Select --</option>
+                          <option *ngFor="let item of approvedList; let i" value="{{ item.id }}">
+                            {{ item.name }}
+                          </option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <div class="form-group">
+                        <label class="control-label ">BPMP Status</label>
+                        <select class="form-control"  [(ngModel)]="searchdata.BpMpStatus">
+                          <option value="">-- Select --</option>
+                          <option value="WAITING FOR ACTION">WAITING FOR ACTION</option>
+                          <option value="Cancelled">Cancelled </option>
+                          <option value="Approved">Approved</option>
+                          <option value="Rejected">Rejected</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <div class="form-group">
+                        <label class="control-label ">CN Status</label>
+                        <select class="form-control" [(ngModel)]="cnStatus" (change)="changecnStatus(cnStatus)">
+                          <option value="">-- Select --</option>
+                          <option value="open">Open</option>
+                          <option value="closed">Closed</option>
+                          <option value="rejected">Rejected</option>
+                          <option value="cancelled">Cancelled</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="col-md-2">
+                      <div class="form-group">
+                        <label class="col-form-label " >Type</label>
+                        <div class="m-form__radio-group mt-1">
+                          <div class="custom-control custom-radio">
+                            <input type="radio" value="credit" id="customRadio1" name="customRadio" class="custom-control-input" [(ngModel)]="customRadio" (change)="changeType($event)" />
+                            <label class="custom-control-label" for="customRadio1" >Credit</label>
+                          </div>
+                          <div class="custom-control custom-radio">
+                            <input type="radio" value="debit" id="customRadio2" name="customRadio" class="custom-control-input" [(ngModel)]="customRadio" (change)="changeType($event)"/>
+                            <label class="custom-control-label" for="customRadio2" >Debit</label>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class=" mt-4">
+                      <button class="btn btn-primary c-btn" (click)="search()" >Search</button>
+                      <button class="btn btn-warning c-btn" (click)="refresh(dropdown)">
+                      <i class="fas fa-sync"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <div class="">
+            <div class="m-panel__body">
+              <div class="m-form -search">
+                <div class="m-form__container">
+                  <div class="m-form__form">
+                    <div class="row">
+                      <div class="col-md-12">
+                        <div class="table-responsive p-table search-table" >
+                          <p-table #dt [columns]="searchCols" [value]="searchData" [paginator]="true" [rows]="11" >
+                          <ng-template pTemplate="caption">
+                            <div class="d-flex" *ngIf = 'showTable'>
+                              <label class=" mt-2">Export to CSV</label>
+                              <button type="button" pButton pRipple icon="pi pi-download" (click)="dt.exportCSV()" class="p-mr-2 btn ml-2" pTooltip="CSV" tooltipPosition="bottom" ></button>
+                            </div>
+                          </ng-template>
+                            <ng-template pTemplate="header" let-columns>
+                              <tr>
+                                <th>#</th>
+                                <th *ngFor="let col of columns" [pSortableColumn]="col.field">
+                                  {{ col.header }}
+                                  <p-sortIcon [field]="col.field" ariaLabel="Activate to sort"
+                                  ariaLabelDesc="Activate to sort in descending order"
+                                  ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+                                </th>
+                              </tr>
+                              <tr>
+                                <th></th>
+                                <th *ngFor="let col of columns" [ngSwitch]="col.field">
+                                  <input *ngSwitchCase="'dnCnId'" pInputText type="text" class="form-control" (input)="dt.filter($event.target.value, col.field, 'contains')">
+                                  <input *ngSwitchCase="'site'" pInputText type="text" class="form-control" (input)="dt.filter($event.target.value, col.field, 'contains')">
+                                  <input *ngSwitchCase="'customer'" pInputText type="text" class="form-control" (input)="dt.filter($event.target.value, col.field, 'contains')">
+                                  <input *ngSwitchCase="'originalInvNo'" pInputText type="text" class="form-control" (input)="dt.filter($event.target.value, col.field, 'contains')">
+                                  <input *ngSwitchCase="'dnCnAmount'" pInputText type="text" class="form-control" (input)="dt.filter($event.target.value, col.field, 'contains')">
+                                  <input *ngSwitchCase="'type'" pInputText type="text" class="form-control" (input)="dt.filter($event.target.value, col.field, 'contains')">
+                                  <input *ngSwitchCase="'purpose'" pInputText type="text" class="form-control" (input)="dt.filter($event.target.value, col.field, 'contains')">
+                                  <input *ngSwitchCase="'vendorCn'" pInputText type="text" class="form-control" (input)="dt.filter($event.target.value, col.field, 'contains')">
+                                  <input *ngSwitchCase="'dateApplied'" pInputText type="text" class="form-control" (input)="dt.filter($event.target.value, col.field, 'contains')">
+                                  <input *ngSwitchCase="'appliedBy'" pInputText type="text" class="form-control" (input)="dt.filter($event.target.value, col.field, 'contains')">
+                                  <input *ngSwitchCase="'approvedBy'" pInputText type="text" class="form-control" (input)="dt.filter($event.target.value, col.field, 'contains')">
+                                  <input *ngSwitchCase="'bpMpId'" pInputText type="text" class="form-control" (input)="dt.filter($event.target.value, col.field, 'contains')">
+                                  <input *ngSwitchCase="'bpMpStatus'" pInputText type="text" class="form-control" (input)="dt.filter($event.target.value, col.field, 'contains')">
+                                  <input *ngSwitchCase="'financeAccountCode'" pInputText type="text" class="form-control" (input)="dt.filter($event.target.value, col.field, 'contains')">
+                                  <input *ngSwitchCase="'cnNumber'" pInputText type="text" class="form-control" (input)="dt.filter($event.target.value, col.field, 'contains')">
+                                  <input *ngSwitchCase="'cnDate'" pInputText type="text" class="form-control" (input)="dt.filter($event.target.value, col.field, 'contains')">
+                                  <input *ngSwitchCase="'cnStatus'" pInputText type="text" class="form-control" (input)="dt.filter($event.target.value, col.field, 'contains')">
+                                  <input *ngSwitchCase="'source'" pInputText type="text" class="form-control" (input)="dt.filter($event.target.value, col.field, 'contains')">
+                              </th>
+                              </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-rowData let-columns="searchCols" let-r="rowIndex">
+                              <tr [pSelectableRow]="rowData" *ngIf = 'showTable'>
+                                <td>{{ r + 1 }}</td>
+                                <td *ngFor="let col of searchCols; let i =index">
+                                  <span *ngIf="rowData[col.field] !='print' && rowData[col.field] !='update' && rowData[col.field] !='upload' && rowData[col.field] !='doc'  && i != 4 ">
+                                    {{ rowData[col.field] }} 
+                                  </span>
+                                  <a class="print"  *ngIf="rowData[col.field] =='print'" routerLink="/print-cndn" [queryParams]="{ dnCnId: id}" target="_blank" (click)="_doPrint(rowData)">
+                                    <i class="fas fa-print"></i>
+                                  </a>
+                                  <span *ngIf="i == 4">
+                                    {{rowData[col.field] | number:'0.2-2' }}
+                                  </span>
+                                  <!-- <a *ngIf="rowData[col.field] =='update' &&  (searchData[r].cnStatus == 'closed' || searchData[r].cnStatus == 'Open') && searchData[r].bpMpStatus =='Approved' " class="update" (click)="_doUpdate(rowData)">
+                                    <i class="fas fa-edit"  ></i>
+                                  </a> -->
+                                  <a *ngIf="rowData.edit && col.field == 'Update'" class="update" (click)="_doUpdate(rowData)">
+                                    <i class="fas fa-edit"  ></i>
+                                  </a> 
+                                  <!-- <a class="update" (click)="_doUpdate(rowData,r)">
+                                    <i class="fas fa-edit"  ></i>
+                                  </a> -->
+                                  <span *ngIf="rowData[col.field] =='doc'" class="document">
+                                    <span *ngFor="let item of rowData.supportDocuments">
+                                      <a   href="{{item.filePath}}" target="_blank" >{{item.fileName }}, </a></span>
+                                    <br>
+                                  </span>
+                                  <span class="form-group" *ngIf="rowData[col.field] =='upload'">
+                                    <input  #myInput class="" type="file" (change)="_uploadFile($event,rowData)">
+                                  <button pButton class="p-table__btn Upload text-center" icon="fas fa-upload" (click)="fileUpload(rowData)" name="fileInput" title="upload" ></button>
+                                  <button pButton class="p-table__btn Upload text-center" icon="fas fa-sync" (click)="removeFile()" title="remove file" name="fileInput" ></button>
+                                  </span>
+                                </td>
+                              </tr>
+                            </ng-template>
+                            <ng-template pTemplate="summary">
+                              Total {{ searchData?.length }} entries
+                            </ng-template>
+                          </p-table>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Footer -->
+<app-footer></app-footer>
+<!-- End Footer -->
+
+<p-dialog [(visible)]="upadateDetailsDialog" [modal]="true" [style]="{ width: '990px' }" [showHeader]="false" [draggable]="false" [closeOnEscape]="true" [dismissableMask]="true" [responsive]="true">
+  <div class="p-dialog__content">
+    <div class="p-dialog__header">
+      <h5 class="modal-title">Update CN# Details</h5>
+    </div>
+    <div class="p-dialog__body">
+      <div class="row">
+        <div class="col-md-4">
+          <div class="form-group">
+            <label class="col-form-label ">Customer:</label>
+            <h6>{{updateData.customer}}</h6>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <label class="col-form-label ">Purpose:</label>
+          <h6>{{updateData.purpose}}</h6>
+        </div>
+        <div class="col-md-4">
+          <label class="col-form-label ">CN Amount:</label>
+          <h6>{{updateData.cnAmount}}</h6>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-4">
+          <div class="form-group">
+            <label class="control-label ">CNDN Number<span class="mandatory text-danger">*</span></label>
+            <div>
+              <!-- <input type="text" class="form-control form-control-sm" [(ngModel)]="cndnNumber"[ngStyle]="{'border':  (cndnNumber == '' && updateClicked)  ? '1px solid red' : '1px solid #758283' }"> -->
+              <input type="text" class="form-control form-control-sm" [(ngModel)]="cndnNumber">
+              <span class="text-danger text-sm" *ngIf='updateClicked && cndnNumber == "" '>Enter CNDN Number</span>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <label class="control-label ">CNDN Date<span class="mandatory text-danger">*</span></label>
+            <div>
+              <p-calendar dateFormat="dd-mm-yy" [(ngModel)]="cndnDate"   (onSelect)="changeCndnDate($event)" dateFormat="dd/mm/yy"  [readonlyInput]="true" ></p-calendar>
+              <span class="text-danger text-sm" *ngIf='updateClicked && cndnDate == "" '>Select Date</span>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <label class="control-label "> Date Applied (dd-mm-yyyy)</label>
+            <div>
+              <h6>{{updateData.dateApplied}}</h6>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <p-footer>
+    <div class="p-dialog__footer">
+      <button type="button" class="btn btn-sm btn-primary c-btn" (click)="UpdateCN()"> Update</button>
+      <button type="button" class="btn btn-sm btn-danger c-btn" (click)="coloseUpdateModal()">Cancel</button>
+    </div>
+  </p-footer>
+</p-dialog>
+
+<p-dialog [(visible)]="showSuccessDialog" [modal]="true" [style]="{'width':'500px'}" [showHeader]="false"
+  [draggable]="false" [closeOnEscape]="true" [dismissableMask]="true" [responsive]="true" [closable]="false">
+  <div class="p-dialog__content">
+    <div class="p-dialog__header ">
+      <h5 class="modal-title">Success</h5>
+    </div>
+    <div class="p-dialog__body">
+        <h5 class="p-dialog__confirm--lbl -delete" *ngIf='!successfileUpload'>
+          Successfully updated!!
+        </h5>
+        <h5 class="p-dialog__confirm--lbl -delete" *ngIf='successfileUpload'>
+          Successfully File uploaded!!
+        </h5>
+        
+    </div>
+  </div>
+  <p-footer>
+    <div class="p-dialog__footer">
+        <hr>
+        <button class="btn btn-sm btn-primary c-btn" (click)="closeSuccessModal()">
+            Ok
+        </button>
+    </div>
+</p-footer>
+</p-dialog>
+
+<p-dialog header = 'Alert' [(visible)]="ErrorModel" [modal]="true" [style]="{'width':'500px'}" [showHeader]="true" [draggable]="false" [dismissableMask]="true" [responsive]="true" [closable]="false" >
+    <div class="p-dialog__content">
+      <div class="p-dialog__body">
+        <h5 class="p-dialog__confirm--lbl -delete text-center" *ngIf='!emptyFile'>
+            Some Error occoured!  Please contact ISD.
+        </h5>
+        <h5 class="p-dialog__confirm--lbl -delete" *ngIf='emptyFile'>
+          Kindly select one file to upload.
+        </h5>
+      </div>
+    </div>
+    <p-footer >
+      <div class="p-dialog__footer">
+        <hr>
+        <button class="btn btn-sm btn-primary c-btn" (click)="closeErrorModal()" >OK</button>
+      </div>
+    </p-footer>
+</p-dialog>

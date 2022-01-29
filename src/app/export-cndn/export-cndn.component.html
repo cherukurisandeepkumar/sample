@@ -1,0 +1,141 @@
+<!-- Header -->
+<app-header></app-header>
+<!-- End Header -->
+
+<!-- Page Content -->
+<div class="page">
+  <div class="page-container">
+    <div class="container-fluid container-wrapper">
+      <div class="overlay" *ngIf="overlay"></div>
+      <div class="col-sm-12 p-0">
+        <h4 class="page-title" #pageTitle>Export CNDN</h4>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="m-panel__body">
+            <div class="" *ngIf="loader" id='loader'>
+              <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="margin: auto; background: none; display: block; shape-rendering: auto;" width="200px" height="200px" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid">
+                <circle cx="50" cy="50" r="0" fill="none" stroke="#e90c59" stroke-width="2">
+                  <animate attributeName="r" repeatCount="indefinite" dur="1s" values="0;40" keyTimes="0;1" keySplines="0 0.2 0.8 1" calcMode="spline" begin="-0.5s"></animate>
+                  <animate attributeName="opacity" repeatCount="indefinite" dur="1s" values="1;0" keyTimes="0;1" keySplines="0.2 0 0.8 1" calcMode="spline" begin="-0.5s"></animate>
+                </circle>
+                <circle cx="50" cy="50" r="0" fill="none" stroke="#46dff0" stroke-width="2">
+                  <animate attributeName="r" repeatCount="indefinite" dur="1s" values="0;40" keyTimes="0;1" keySplines="0 0.2 0.8 1" calcMode="spline"></animate>
+                  <animate attributeName="opacity" repeatCount="indefinite" dur="1s" values="1;0" keyTimes="0;1" keySplines="0.2 0 0.8 1" calcMode="spline"></animate>
+                </circle>
+              </svg>
+            </div>
+            <div class="m-form -search">
+              <div class="m-form__container">
+                <div class="m-form__form">
+                  <div class="row">
+                    <div class="col-md-3">
+                      <div class="form-group ">
+                        <label class="control-label">From Date </label>
+                        <p-calendar [(ngModel)]="strDate" [maxDate]="maxDate" dateFormat="dd/mm/yy" 
+                        [readonlyInput]="true" (onSelect)='selectFromDate($event)'   ngClass="ui-calendar-custom"></p-calendar>
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <div class="form-group ">
+                        <label class="control-label">To Date </label>
+                        <p-calendar [(ngModel)]="enDate"   [maxDate]="maxDate" dateFormat="dd/mm/yy" 
+                        [readonlyInput]="true" (onSelect)='selecttoDate($event)'   ngClass="ui-calendar-custom"></p-calendar>
+                      </div>
+                    </div>
+                    <div class="col-md-3" >
+                      <!-- <div class="form-group">
+                        <label class="control-label">Company Name</label>
+                        <p-dropdown #dropdown [options]="customerList" optionLabel="customer" optionValue="customerCode"  placeholder="--Select--" [virtualScroll]="true" [itemSize]="10" [filter]="true" (onChange)="changeCompany($event)"></p-dropdown>
+                      </div> -->
+                      <div class="form-group">
+                        <label class="control-label ">Customer Name</label>
+                        <p-dropdown #dropdown [options]="customerList" optionLabel="customer" optionValue="customerCode"  placeholder="--Select--" [virtualScroll]="true" [itemSize]="10" [filter]="true" (onChange)="changeCompany($event)"></p-dropdown>
+                      </div>
+                    </div>
+                    <div class="col-md-2" >
+                      <div class="form-group">
+                        <label class="control-label">Status</label>
+                        <select class="form-control" [(ngModel)]="status" [ngStyle]="{'border':  status == '' && submitClicked  ? '1px solid red' : '1px solid #758283' }">
+                          <option value="">-- Select --</option>
+                          <option value="0">New</option>
+                          <option value="1">Exported</option>
+                        </select>
+                        <span *ngIf="status == '' && submitClicked " class="text-danger text-sm">Select one Status</span>
+                      </div>
+                    </div>
+                    <div class="col-md-1 pr-0 pl-0">
+                      <button class="btn btn-primary c-btn mt-4" (click)='search(dropdown)'>Export</button>
+                      <button class="btn btn-warning c-btn mt-4" (click)='reload(dropdown)'><i class="fas fa-sync-alt"></i></button>
+                    </div>
+                  </div>
+                  <!-- <div class="row">
+                   <div class="col-md-2">
+                    <a class="btn btn-primary c-btn mt-2"  href="{{filePath}}" (click)='clickDownload()'  *ngIf = 'filePath.length != 0'>Download</a>
+                   </div>
+                  </div> -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Page Content End -->
+
+<!-- Footer -->
+<app-footer></app-footer>
+<!-- End Footer -->
+
+<!-- Exported success Popup -->
+<p-dialog [(visible)]="submitDialog" [modal]="true" [style]="{'width':'500px'}" [showHeader]="false"
+  [draggable]="false" [closeOnEscape]="true" [dismissableMask]="true" [responsive]="true" [closable]="false">
+  <div class="p-dialog__content">
+    <div class="p-dialog__header ">
+      <h5 class="modal-title">Message </h5>
+    </div>
+    <div class="p-dialog__body">
+      <h5 class="p-dialog__confirm--lbl -delete" >
+        Successfully Exported!
+      </h5>
+    </div>
+  </div>
+  <p-footer>
+    <div class="p-dialog__footer">
+      <hr>
+      <button class="btn btn-sm btn-primary c-btn" (click)="cancelSubmitModal()">OK</button>
+    </div>
+  </p-footer>
+</p-dialog>
+
+<!-- Error Model -->
+<p-dialog header = 'Alert' [(visible)]="ErrorModel" [modal]="true" [style]="{'width':'500px'}" [showHeader]="true" [draggable]="false" [dismissableMask]="true" [responsive]="true" [closable]="false" >
+  <div class="p-dialog__content">
+    <div class="p-dialog__body">
+      <h5 class="p-dialog__confirm--lbl -delete text-center" *ngIf = '!validDate && !emptyDate && !error && !emptyExpot'>
+        Some Error occoured!  Please contact ISD.
+      </h5>
+      <h5 class="p-dialog__confirm--lbl -delete text-center" *ngIf = 'validDate'>
+        From Date should be less than To Date
+      </h5>
+      <h5 class="p-dialog__confirm--lbl -delete text-center" *ngIf = 'emptyDate'>
+        Select both Start date and End date
+      </h5>
+      <h5 class="p-dialog__confirm--lbl -delete text-center" *ngIf = 'error'>
+        Some error occurred. Kindly contact support team.
+      </h5>
+      <h5 class="p-dialog__confirm--lbl -delete text-center" *ngIf = 'emptyExpot'>
+        There is no data to export
+      </h5>
+      
+    </div>
+  </div>
+  <p-footer >
+    <div class="p-dialog__footer">
+      <hr>
+      <button class="btn btn-sm btn-primary c-btn" (click)="closeErrorModal()" >OK</button>
+    </div>
+  </p-footer>
+</p-dialog>

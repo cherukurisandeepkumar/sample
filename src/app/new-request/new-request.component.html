@@ -1,0 +1,170 @@
+<!-- Header -->
+<app-header></app-header>
+<!-- End Header -->
+
+<!-- Page Content -->
+<div class="page">
+  <div class="page-container">
+    <div class="container-fluid container-wrapper">
+      <div class="overlay" *ngIf="overlay"></div>
+      <div class="col-sm-12 p-0">
+        <h4 class="page-title" #pageTitle>File Upload</h4>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="m-panel__body">
+            <div class="" *ngIf="loader" id='loader'>
+              <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="margin: auto; background: none; display: block; shape-rendering: auto;" width="200px" height="200px" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid">
+                <circle cx="50" cy="50" r="0" fill="none" stroke="#e90c59" stroke-width="2">
+                  <animate attributeName="r" repeatCount="indefinite" dur="1s" values="0;40" keyTimes="0;1" keySplines="0 0.2 0.8 1" calcMode="spline" begin="-0.5s"></animate>
+                  <animate attributeName="opacity" repeatCount="indefinite" dur="1s" values="1;0" keyTimes="0;1" keySplines="0.2 0 0.8 1" calcMode="spline" begin="-0.5s"></animate>
+                </circle>
+                <circle cx="50" cy="50" r="0" fill="none" stroke="#46dff0" stroke-width="2">
+                  <animate attributeName="r" repeatCount="indefinite" dur="1s" values="0;40" keyTimes="0;1" keySplines="0 0.2 0.8 1" calcMode="spline"></animate>
+                  <animate attributeName="opacity" repeatCount="indefinite" dur="1s" values="1;0" keyTimes="0;1" keySplines="0.2 0 0.8 1" calcMode="spline"></animate>
+                </circle>
+              </svg>
+            </div>
+            <div class="m-form -search">
+              <div class="m-form__container">
+                <div class="m-form__form">
+                  <div class="row">
+                    <!-- <div class="col-md-3" >
+                    
+                      <div class="form-group">
+                        <label class="control-label ">Customer Name</label>
+                        <p-dropdown #dropdown [options]="customerList" optionLabel="customer" optionValue="customerCode"  placeholder="--Select--" [virtualScroll]="true" [itemSize]="10" [filter]="true" (onChange)="changeCompany($event)"></p-dropdown>
+                      </div>
+                    </div> -->
+                    <div class="col-md-3" >
+                        <div class="form-group">
+                          <label class="control-label">Program Type</label>
+                          <select class="form-control" [(ngModel)]="fileUploadData.programConfigID"
+                          (change)="changeType($event)"
+                           [ngStyle]="{'border':  fileUploadData.programConfigID == '' && submitClicked  ? '1px solid red' : '1px solid #758283' }">
+                            <option value="">-- Select --</option>
+                            <option *ngFor="let item of ProgramList" [value]="item.programConfigID">{{item.programName}}</option>
+                            <!-- <option value="1">Exported</option> -->
+                          </select>
+                          <span *ngIf="fileUploadData.programConfigID == '' && submitClicked " class="text-danger text-sm">Select Program Type</span>
+                        </div>
+                      </div>
+                      <div class="col-md-3" >
+                        <div class="form-group">
+                          <label class="control-label">Type</label>
+                          <select class="form-control" [(ngModel)]="fileUploadData.type" 
+                          [ngStyle]="{'border':  fileUploadData.type == '' && submitClicked  ? '1px solid red' : '1px solid #758283' }">
+                            <option value="">-- Select --</option>
+                            <option *ngFor="let item of TypeList" [value]="item.value">{{item.value}}</option>
+                          </select>
+                          <span *ngIf="fileUploadData.type == '' && submitClicked " class="text-danger text-sm">Select one type</span>
+                        </div>
+                      </div>
+                    <div class="col-md-3" >
+                      <div class="form-group">
+                        <label class="control-label">File Type</label>
+                        <select class="form-control" [(ngModel)]="fileUploadData.fileType" 
+                        [ngStyle]="{'border':  fileUploadData.fileType == '' && submitClicked  ? '1px solid red' : '1px solid #758283' }">
+                          <option value="">-- Select --</option>
+                          <option *ngFor="let item of fileTypeList" [value]="item">{{item}}</option>
+                        </select>
+                        <span *ngIf="fileUploadData.fileType == '' && submitClicked " class="text-danger text-sm">Select one Status</span>
+                      </div>
+                    </div>
+                    <div class="col-md-3 form-group  mt-4 ">
+                      <!-- <input type="file" class="fileSelected2 form-control-file" (change)="_multiUploadFile($event)" multiple />
+                      <button class="fileSleect btn btn-primary btn-sm" (click)="triggerInput2()" > Choose File </button> -->
+                      <div class="fileSelected-container" *ngIf="fileUploadData.programConfigID != '' && fileUploadData.fileType != ''">
+                          <input type="file" class="fileSelected" [(ngModel)]="fileSelected" multiple
+                          (change)="_uploadmultipleFile($event)" 
+                          /> Choose File
+                         </div>
+                         <div class="fileSelected-container" *ngIf="fileUploadData.programConfigID == '' || fileUploadData.fileType == ''">
+                          <input type="submit" class="fileSelected" [(ngModel)]="fileSelected" multiple
+                          (click)="_uploadmultipleFile($event)"
+                          /> Choose File
+                         </div>
+                      <button class="btn btn-danger btn-sm ml-3" (click)="multiClearAllFile()" *ngIf="fileUploadData.fileAttributesList.length != 0" >Clear All </button>
+                    </div>
+
+                   
+                   
+                    <!-- <div class="col-md-1 pr-0 pl-0">
+                      <button class="btn btn-primary c-btn mt-4" (click)='Submit()'>Submit</button>
+                      <button class="btn btn-warning c-btn mt-4" (click)='reload()'><i class="fas fa-sync-alt"></i></button>
+                    </div> -->
+                  </div>
+
+                  <div class="row" *ngIf="fileUploadData.fileAttributesList.length != 0">
+                    <div class="col-md-12">
+                      <ng-template [ngIf]="fileUploadData.fileAttributesList?.length > 0" >
+                        <ul class="list-group">
+                          <li class="list-group-item bg_success text-white">  File: </li>
+                          <li class="list-group-item" *ngFor=" let file of fileUploadData.fileAttributesList; let ind = index "> {{ file.fileName }} 
+                            <span class="text-danger _pointer" 
+                            (click)="multiRemoveFile(ind)"><i class="fas fa-trash-alt"></i ></span></li>
+                        </ul>
+                      </ng-template>
+                    </div>
+                  </div>
+                  <div class="row" *ngIf="fileUploadData.fileAttributesList.length != 0">
+                    <div class="col-md-12  d-flex justify-content-end">
+                      <button class="btn btn-primary c-btn mt-4" (click)='Submit()'>Submit</button>
+                      <button class="btn btn-warning c-btn mt-4" (click)='reload()'>Cancel</button>
+                    </div>
+                  </div>
+                </div>
+              </div>  
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Page Content End -->
+
+<!-- Footer -->
+<app-footer></app-footer>
+<!-- End Footer -->
+
+<!-- Exported success Popup -->
+<p-dialog [(visible)]="submitDialog" [modal]="true" [style]="{'width':'500px'}" [showHeader]="false"
+  [draggable]="false" [closeOnEscape]="true" [dismissableMask]="true" [responsive]="true" [closable]="false">
+  <div class="p-dialog__content">
+    <div class="p-dialog__header ">
+      <h5 class="modal-title">Message </h5>
+    </div>
+    <div class="p-dialog__body">
+      <h5 class="p-dialog__confirm--lbl -delete" >
+        {{errorMsg}}
+      </h5>
+    </div>
+  </div>
+  <p-footer>
+    <div class="p-dialog__footer">
+      <hr>
+      <button class="btn btn-sm btn-primary c-btn" (click)="cancelSubmitModal()">OK</button>
+    </div>
+  </p-footer>
+</p-dialog>
+
+<!-- Error Model -->
+<p-dialog header = 'Alert' [(visible)]="ErrorModel" [modal]="true" [style]="{'width':'500px'}" [showHeader]="true" [draggable]="false" [dismissableMask]="true" [responsive]="true" [closable]="false" >
+  <div class="p-dialog__content">
+    <div class="p-dialog__body">
+     
+     
+      <h5 class="p-dialog__confirm--lbl -delete text-center" >
+        {{errorMsg}}
+      </h5>
+      
+    </div>
+  </div>
+  <p-footer >
+    <div class="p-dialog__footer">
+      <hr>
+      <button class="btn btn-sm btn-primary c-btn" (click)="closeErrorModal()" >OK</button>
+    </div>
+  </p-footer>
+</p-dialog>

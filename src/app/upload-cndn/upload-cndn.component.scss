@@ -1,0 +1,47 @@
+input[type='file'].form-control {
+    padding: .12rem .75rem;
+    font-size: 14px;
+}
+.fileSelected-container {
+    position: relative;
+    padding: 3px 10px;
+    display: inline-block;
+    background: #007bff;
+    opacity: 1;
+    height: 27px;
+    width: auto;
+    font-size: 12px;
+    color: #fff;
+    margin: 3px 5px 3px 0;
+    line-height: 1.5;
+    border-radius: 2px;
+    transition: all 0.3s ease-in-out;
+}
+.fileSelected {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    opacity: 0;
+    width: 100%;
+}
+
+.fileSelected2 {
+    display: block;
+    visibility: hidden;
+    width: 0;
+    height: 0;
+}
+.bg_success {
+    background-color: #88BA16 !important;
+}
+
+.submitted-accordian.true {
+    background-color: #88BA16 !important;
+}
+
+p-accordiontab {
+    width: 100% !important;
+}
+

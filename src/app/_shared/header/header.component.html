@@ -1,0 +1,58 @@
+<div class="m-header">
+  <div class="m-header__container">
+    <nav class="navbar fixed-top navbar-expand-lg navbar-light m-header__navbar">
+      <div class="m-header__navbar--top">
+        <div class="container-fluid container-wrapper">
+          <div class="m-header__navbar--top-nav">
+            <div class="m-header__navbar--top-nav--logo">
+              <div class="m-header__navbar--top-nav-first">
+                <a class="navbar-brand -company-logo" routerLink="/dashboard">
+                  <img src="assets/img/Acer-logo.png" alt="Acer">
+                </a>
+              </div>
+              <div class="m-header__navbar--top-nav-middle">
+                <h4 class="navbar-brand -app-logo">File Upload</h4>
+                <button class="navbar-toggler" type="button" data-toggle="collapse"
+                  data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                  aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon"></span>
+                </button>
+              </div>
+            </div>
+            <div class="m-header__navbar--top-user">
+              <div class="dropdown -user">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="userDropdown" data-toggle="dropdown"
+                  aria-haspopup="true" aria-expanded="false">
+                  <label class="username">{{userName}}</label>
+                  <i class="fas fa-user"></i>
+                </button>
+                <div class="dropdown-menu" aria-labelledby="userDropdown">
+                  <a class="dropdown-item"  (click)="logout()">Logout</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="m-header__navbar--main">
+        <app-main-menu></app-main-menu>
+      </div>
+    </nav>
+  </div>
+</div>
+
+
+<div class="collapse navbar-collapse c-header-menu" id="navbarSupportedContent">
+  <div class="navbar-custom" id="topnav">
+      <div class="container-fluid">
+          <div id="navigation">
+              <ul class="navigation-menu">
+                  <li class="has-submenu"><a routerLink="/dashboard"><i class="fas fa-home"></i>Dashboard</a></li>
+                  <li class="has-submenu"><a routerLink="/status"><i class="fas fa-tasks"></i>Status</a></li>
+                  <li class="has-submenu"><a routerLink="/search"><i class="fas fa-search"></i>Search</a></li>
+                  <li class="has-submenu"><a routerLink="/newrequest"><i class="fas fa-plus"></i>New Request</a></li>
+              </ul>
+          </div>
+      </div>
+  </div>
+</div>

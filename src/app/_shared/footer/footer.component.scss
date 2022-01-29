@@ -1,0 +1,44 @@
+$name : m-footer;
+$selector : ".#{$name}";
+
+#{$selector} { 
+    position: relative;
+
+    &__english {
+        label {
+            color: #616161;
+            margin-bottom: 0;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            i {
+                font-size: 22px;
+                margin-right: 10px;
+            }
+        }
+    }
+
+    &__list {
+        display: flex;
+        justify-content: center;
+    }
+
+    &__nav {
+        ul {
+            display: flex;
+            padding: 0;
+            li {
+                list-style-type: none;
+                padding: 0 18px;
+                a, span {
+                    display: block;
+                    color: #616161;
+                    font-size: 13px;
+                }
+
+            }
+        }
+    }
+
+
+}
